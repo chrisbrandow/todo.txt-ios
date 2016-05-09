@@ -111,8 +111,8 @@ static void * kShowDateContext = &kShowDateContext;
         
         // Set the priorityLabel and ageLabel fonts.  The textView's font is set by
         // the controller or view model
-        priorityLabel.font = [UIFont boldSystemFontOfSize:14.0];
-        ageLabel.font = [UIFont systemFontOfSize:10.0];
+        priorityLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:14.0];
+        ageLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:10.0];
         
         ageLabel.textColor = [UIColor lightGrayColor];
         

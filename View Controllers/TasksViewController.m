@@ -76,6 +76,7 @@ static CGFloat const kMinCellHeight = 44;
 
 @interface TasksViewController () <IASKSettingsDelegate>
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *filterBarButtonItem;
 @property (strong, nonatomic) IBOutlet UILabel *emptyLabel;
 @property (nonatomic, strong) NSArray *tasks;
 @property (nonatomic, strong) Sort *sort;
@@ -124,6 +125,8 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 	[self.appDelegate.taskBag reload];	
 
 	// reload main tableview data
+    self.filter = [FilterFactory getAndFilterWithPriorities:nil contexts:nil projects:nil text:nil caseSensitive:NO];
+
 	self.tasks = [self.appDelegate.taskBag tasksWithFilter:nil withSortOrder:self.sort];
 	[self.tableView reloadData];
 	
@@ -222,12 +225,17 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	NSLog(@"viewWillAppear - tableview");
+
 	[self hideSearchBar:NO];
 	[self reloadData:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(reloadData:) 
 												 name:kTodoChangedNotification 
 											   object:nil];
+    UIImage *filterBack = (self.lastFilteredContexts.count || self.lastFilteredProjects.count) ? [self backImageWithColor:[UIColor colorWithWhite:.7 alpha:1.0]] : [self backImageWithColor:self.view.backgroundColor];
+
+    [self.filterBarButtonItem setBackgroundImage:filterBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+
 }
 
 - (void) viewDidAppear:(BOOL)animated {	
@@ -236,7 +244,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
         if (![self.appDelegate isManualMode]) {
 			[self.appDelegate syncClientWithCompletion:nil];
         }
-	}	
+	}
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
@@ -282,7 +290,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 
 - (UIFont *)mainTextFont
 {
-    return [UIFont systemFontOfSize:14];
+    return [UIFont fontWithName:@"AvenirNext-Regular" size:14];
 }
 
 #pragma mark -
@@ -497,7 +505,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
     }
 }
 
-- (IBAction)sortButtonPressed:(id)sender {
+- (IBAction)sortButtonPressed:(UIBarButtonItem *)sender {
 	[self.actionSheetPicker hidePickerWithCancelAction];
 	self.actionSheetPicker = nil;
 	self.actionSheetPicker = [ActionSheetStringPicker showPickerWithTitle:@"Select Sort Order"
@@ -518,6 +526,16 @@ shouldReloadTableForSearchString:(NSString *)searchString
 										 NSLog(@"Sort Picker Canceled");
 									 }
 										  origin:sender];
+}
+- (UIImage *)backImageWithColor:(UIColor *)color {
+    CGSize size = CGSizeMake(30.0, 30.0);
+    UIGraphicsBeginImageContextWithOptions(size, false, [[UIScreen mainScreen] scale]);
+    CGFloat borderWidth = 1.0;
+    CGRect circleBounds = CGRectMake(borderWidth/2, borderWidth/2, size.width - borderWidth, size.height - borderWidth);
+    [color setFill];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:circleBounds cornerRadius:2.0];
+    [path fill];
+    return UIGraphicsGetImageFromCurrentImageContext();
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {

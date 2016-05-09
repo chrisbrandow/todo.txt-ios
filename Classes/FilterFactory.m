@@ -49,6 +49,25 @@
 #import "ByProjectFilter.h"
 #import "ByTextFilter.h"
 
+#import "Task.h"
+@interface BySDMFilter : NSObject <Filter>
+- (BOOL)apply:(id)object;
+@end
+
+@implementation BySDMFilter
+
+- (BOOL)apply:(id)object {
+//this acutally needs to
+    Task *input = (Task *)object;
+    NSLog(@"date: %@", input.prependedDate);
+    if ([input.prependedDate containsString:@"-05-"] || [input.originalText containsString:@"sdm:"]) {
+        return YES;
+    }
+    
+    return NO;
+}
+@end
+
 @implementation FilterFactory
 
 + (id <Filter>) getAndFilterWithPriorities:(NSArray*)priorities 
@@ -58,7 +77,7 @@
 							 caseSensitive:(BOOL)caseSensitive {
 
 	AndFilter *filter = [[AndFilter alloc] init];
-	
+    [filter addFilter:[[BySDMFilter alloc] init]];
 	if (priorities.count > 0) {
 		[filter addFilter:[[ByPriorityFilter alloc] initWithPriorities:priorities]];
 	}

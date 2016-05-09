@@ -158,7 +158,6 @@ static NSString * const kLoginScreenSegueNotAnimatedIdentifier = @"LoginScreenSe
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.taskBag = [TaskBagFactory getTaskBag];
-    
     return YES;
 }
 
