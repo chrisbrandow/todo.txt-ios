@@ -82,6 +82,9 @@
 - (void)markComplete:(NSDate*)date;
 - (void)markIncomplete;
 - (void)deleteTask;
+- (void)setPriorityToday;
+- (void)undoPriorityToday;
+- (BOOL)isPriortyToday;
 - (NSString*)inScreenFormat;
 - (NSString*)inFileFormat;
 - (void)copyInto:(Task*)destination;

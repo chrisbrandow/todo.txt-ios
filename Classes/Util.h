@@ -48,6 +48,8 @@
 #define str(x) @_str(x)
 #define _str(x) #x
 
+extern NSString *const txtDateFormat;
+
 @interface Util : NSObject {
 
 }

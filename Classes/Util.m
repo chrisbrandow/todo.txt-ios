@@ -44,6 +44,7 @@
 
 #import "Util.h"
 
+NSString *const txtDateFormat = @"yyyy-MM-dd";
 
 @implementation Util
 

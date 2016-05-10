@@ -341,6 +341,52 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
     [self performSegueWithIdentifier:kViewTaskSegueIdentifier sender:tableView];
 }
 
+- (NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Task *task = [self taskForTable:tableView atIndex:indexPath.row];
+    id<TaskBag> taskBag = self.appDelegate.taskBag;
+
+    UITableViewRowAction *done = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:(task.completed ? @"Not Done" : @"Complete") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+
+        if (task.completed) {
+            [task markIncomplete];
+        } else {
+            [task markComplete:[NSDate date]];
+        }
+
+        [taskBag update:task];
+
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"auto_archive_preference"]) {
+            [taskBag archive];
+        }
+
+        [self reloadData:nil];
+        [self.appDelegate pushToRemoteWithCompletion:nil];
+        
+    }];
+
+    done.backgroundColor = [UIColor redColor];  
+
+    UITableViewRowAction *today = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:([task isPriortyToday] ? @"Later" : @"Today") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+
+        if ([task isPriortyToday]) {
+            [task undoPriorityToday];
+        } else {
+            [task setPriorityToday];
+        }
+        [taskBag update:task];
+
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"auto_archive_preference"]) {
+            [taskBag archive];
+        }
+
+        [self reloadData:nil];
+        [self.appDelegate pushToRemoteWithCompletion:nil];
+        
+    }];
+    return @[done, today];
+}
+
 #pragma mark -
 #pragma mark Search bar delegate methods
 
@@ -364,33 +410,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
 	[self reloadData:nil];
 }
 
--(UITableViewCellEditingStyle) tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return UITableViewCellEditingStyleDelete;    
-}
-
--(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    id<TaskBag> taskBag = self.appDelegate.taskBag;
-    Task *task = [self taskForTable:tableView atIndex:indexPath.row];
-    
-    if (task.completed) {
-        [task markIncomplete];
-    } else {
-        [task markComplete:[NSDate date]];
-    }
-    
-    [taskBag update:task];
-	
-	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"auto_archive_preference"]) {
-		[taskBag archive];
-	}
-	
-    [self reloadData:nil];
-    [self.appDelegate pushToRemoteWithCompletion:nil];
-}
-
--(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Task *task = [self taskForTable:tableView atIndex:indexPath.row];
     

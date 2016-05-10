@@ -121,6 +121,25 @@
 	}
 }
 
+- (void)setPriorityToday
+{
+    if (!completed && priority.name == PriorityNone) {
+        priority = [Priority byName:PriorityZ];
+    }
+}
+
+- (void)undoPriorityToday
+{
+    if (!completed && priority.name != PriorityNone) {
+        priority = [Priority byName:PriorityNone];
+    }
+}
+
+- (BOOL)isPriortyToday
+{
+    return priority.name == PriorityZ;
+}
+
 - (void)deleteTask {
 	[self update:@""];
 }

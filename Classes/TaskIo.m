@@ -67,7 +67,7 @@ static BOOL sUseWindowsLineBreaks = NO;
 		}
 		
 		line = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        NSLog(@"read line %d: %@", i, line);
+//        NSLog(@"read line %d: %@", i, line);
         if ( ![line length] ) {
             NSLog(@"Ignoring blank line at line number %d", i);
             continue;

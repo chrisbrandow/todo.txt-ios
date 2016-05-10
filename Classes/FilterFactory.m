@@ -49,6 +49,7 @@
 #import "ByProjectFilter.h"
 #import "ByTextFilter.h"
 
+#import "Util.h"
 #import "Task.h"
 @interface BySDMFilter : NSObject <Filter>
 - (BOOL)apply:(id)object;
@@ -57,16 +58,23 @@
 @implementation BySDMFilter
 
 - (BOOL)apply:(id)object {
-//this acutally needs to
+//this acutally needs to be incorporated into settings view
     Task *input = (Task *)object;
-    NSLog(@"date: %@", input.prependedDate);
-    if ([input.prependedDate containsString:@"-05-"] || [input.originalText containsString:@"sdm:"]) {
+//    NSLog(@"date: %@", input.prependedDate);
+//    NSLog(@"date: %@", [Util dateFromString:input.prependedDate withFormat:txtDateFormat]);
+    NSDate *date = [Util dateFromString:input.prependedDate withFormat:txtDateFormat];
+    //need to make this a proper date-based thing
+    //need to have a way to turn it off and on.
+    if ([[NSDate date] timeIntervalSinceDate:date] < 24*60*60*7 || [input.originalText containsString:@"sdm:"]) {
         return YES;
     }
     
     return NO;
 }
 @end
+
+//TODO - make "today" filter as well along with way to turn off and on (just a state-button at bottom bar)
+//make that the right slide option
 
 @implementation FilterFactory
 
