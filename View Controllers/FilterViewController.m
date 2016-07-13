@@ -49,21 +49,24 @@
 #import "TodoTxtAppDelegate.h"
 
 typedef NS_ENUM(NSInteger, FilterViewFilterTypes) {
-    FilterViewFilterTypesContexts = 0,
+    FilterViewFilterTypesTimeRange = 0,
+    FilterViewFilterTypesContexts,
     FilterViewFilterTypesProjects,
-    FilterViewFilterTypesFirst = FilterViewFilterTypesContexts,
+    FilterViewFilterTypesFirst = FilterViewFilterTypesTimeRange,
     FilterViewFilterTypesLast = FilterViewFilterTypesProjects
 };
 
 typedef NS_OPTIONS(NSInteger, FilterViewActiveTypes) {
-    FilterViewActiveTypesContexts = 1 << 0,
-    FilterViewActiveTypesProjects = 1 << 1,
-    FilterViewActiveTypesAll = FilterViewActiveTypesContexts | FilterViewActiveTypesProjects
+    FilterViewActiveTypesTimeRange = 1 << 0,
+    FilterViewActiveTypesContexts = 1 << 1,
+    FilterViewActiveTypesProjects = 1 << 2,
+    FilterViewActiveTypesAll = FilterViewActiveTypesTimeRange | FilterViewActiveTypesContexts | FilterViewActiveTypesProjects
 };
 
 // KVO contexts
 static void * kContextsContext = &kContextsContext;
 static void * kProjectsContext = &kProjectsContext;
+static void * kProjectsScope = &kProjectsScope;
 
 @interface FilterViewController ()
 
@@ -73,12 +76,15 @@ static void * kProjectsContext = &kProjectsContext;
 - (IBAction)done:(id)sender;
 - (IBAction)cancel:(id)sender;
 
+@property (strong, nonatomic) NSArray *scopes;
 @property (strong, nonatomic) NSArray *contexts;
 @property (strong, nonatomic) NSArray *projects;
 @property (strong, nonatomic) NSMutableArray *selectedContexts;
 @property (strong, nonatomic) NSMutableArray *selectedProjects;
+@property (strong, nonatomic) NSMutableArray *selectedScopes;
 @property (readonly, nonatomic) BOOL haveContexts;
 @property (readonly, nonatomic) BOOL haveProjects;
+@property (readonly, nonatomic) BOOL haveScopes;
 @property (nonatomic, strong) NSObject<TaskBag> *taskBag;
 @property (nonatomic) FilterViewActiveTypes activeTypes;
 
@@ -92,9 +98,10 @@ static void * kProjectsContext = &kProjectsContext;
     
     if (self) {
         self.title = @"Filter";
-        
+
         self.selectedContexts = [NSMutableArray array];
         self.selectedProjects = [NSMutableArray array];
+        self.selectedScopes = [NSMutableArray array];
     }
     
     return self;
@@ -105,7 +112,7 @@ static void * kProjectsContext = &kProjectsContext;
     [super viewDidLoad];
     
     self.activeTypes = FilterViewActiveTypesAll;
-    
+    self.scopes = @[@"Last Two Weeks"];
     // Listen for updates to tasks in the TaskBag, to keep our context and project
     // lists current.
     self.taskBag = ((TodoTxtAppDelegate *)[[UIApplication sharedApplication] delegate]).taskBag;
@@ -116,7 +123,6 @@ static void * kProjectsContext = &kProjectsContext;
     [self.taskBag addObserver:self forKeyPath:NSStringFromSelector(@selector(projects))
                       options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew
                       context:kProjectsContext];
-    
     // Use ordinary UITableViewCells
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"FilterCell"];
 }
@@ -139,6 +145,11 @@ static void * kProjectsContext = &kProjectsContext;
     self.selectedProjects = [NSMutableArray arrayWithArray:initialSelectedProjects];
 }
 
+- (void)setInitialSelectedScopes:(NSArray *)initialSelectedScopes
+{
+    self.selectedScopes = [NSMutableArray arrayWithArray:initialSelectedScopes];
+}
+
 - (BOOL)haveContexts
 {
     return (self.contexts.count > 0 && (self.activeTypes & FilterViewActiveTypesContexts));
@@ -149,11 +160,18 @@ static void * kProjectsContext = &kProjectsContext;
     return (self.projects.count > 0 && (self. activeTypes & FilterViewActiveTypesProjects));
 }
 
+- (BOOL)haveScopes
+{
+    return (self.scopes.count > 0 && (self. activeTypes & FilterViewActiveTypesTimeRange));
+}
+
 #pragma mark - Private methods
 
 - (FilterViewFilterTypes)typeOfFilterForSection:(NSInteger)section
 {
-    if (self.haveContexts && section == 0) {
+    if (section == 0) {
+        return FilterViewFilterTypesTimeRange;
+    } else if (self.haveContexts && section == 1) {
         return FilterViewFilterTypesContexts;
     } else {
         return FilterViewFilterTypesProjects;
@@ -164,7 +182,8 @@ static void * kProjectsContext = &kProjectsContext;
 {
     NSArray *filterContexts = nil;
     NSArray *filterProjects = nil;
-    
+    NSArray *filterScopes = nil;
+
     if (self.haveContexts) {
         filterContexts = self.selectedContexts;
     }
@@ -172,9 +191,13 @@ static void * kProjectsContext = &kProjectsContext;
     if (self.haveProjects) {
         filterProjects = self.selectedProjects;
     }
-    
+
+    if (self.haveScopes) {
+        filterScopes = self.selectedScopes;
+    }
+
     if (!self.shouldWaitForDone) {
-        [self.filterTarget filterForContexts:filterContexts projects:filterProjects];
+        [self.filterTarget filterForContexts:filterContexts projects:filterProjects scopes:filterScopes priorities:nil];
     }
 }
 
@@ -182,14 +205,19 @@ static void * kProjectsContext = &kProjectsContext;
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    NSString *const timeRangeTitle = @"Scope";
     NSString *const contextsTitle = @"Contexts";
     NSString *const projectsTitle = @"Projects";
     
     switch ([self typeOfFilterForSection:section]) {
+        case FilterViewFilterTypesTimeRange:
+            return timeRangeTitle;
+            break;
+
         case FilterViewFilterTypesContexts:
             return contextsTitle;
             break;
-            
+
         case FilterViewFilterTypesProjects:
             return projectsTitle;
             break;
@@ -199,7 +227,7 @@ static void * kProjectsContext = &kProjectsContext;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    NSInteger numSections = 0;
+    NSInteger numSections = 1;
     
     if (self.haveContexts) {
         numSections++;
@@ -216,6 +244,10 @@ static void * kProjectsContext = &kProjectsContext;
 {
     // Return the number of rows in the section.
     switch ([self typeOfFilterForSection:section]) {
+        case FilterViewFilterTypesTimeRange:
+            return self.scopes.count;
+            break;
+
         case FilterViewFilterTypesContexts:
             return self.contexts.count;
             break;
@@ -237,13 +269,20 @@ static void * kProjectsContext = &kProjectsContext;
     
     NSString *text = nil;
     switch ([self typeOfFilterForSection:indexPath.section]) {
+        case FilterViewFilterTypesTimeRange:
+            text = [NSString stringWithFormat:@"%@", self.scopes[indexPath.row]];
+            if ([self.selectedScopes containsObject:self.scopes[indexPath.row]]) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+            break;
+
         case FilterViewFilterTypesContexts:
             text = [NSString stringWithFormat:@"@%@", self.contexts[indexPath.row]];
             if ([self.selectedContexts containsObject:self.contexts[indexPath.row]]) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
             break;
-            
+
         case FilterViewFilterTypesProjects:
             text = [NSString stringWithFormat:@"+%@", self.projects[indexPath.row]];
             if ([self.selectedProjects containsObject:self.projects[indexPath.row]]) {
@@ -265,6 +304,14 @@ static void * kProjectsContext = &kProjectsContext;
     
     // Update contexts and projects to filter on
     switch ([self typeOfFilterForSection:indexPath.section]) {
+        case FilterViewFilterTypesTimeRange:
+            if ([self.selectedScopes containsObject:self.scopes[indexPath.row]]) {
+                [self.selectedScopes removeObject:self.scopes[indexPath.row]];
+            } else {
+                [self.selectedScopes addObject:self.scopes[indexPath.row]];
+            }
+            break;
+
         case FilterViewFilterTypesContexts:
             if ([self.selectedContexts containsObject:self.contexts[indexPath.row]]) {
                 [self.selectedContexts removeObject:self.contexts[indexPath.row]];
@@ -272,7 +319,7 @@ static void * kProjectsContext = &kProjectsContext;
                 [self.selectedContexts addObject:self.contexts[indexPath.row]];
             }
             break;
-            
+
         case FilterViewFilterTypesProjects:
             if ([self.selectedProjects containsObject:self.projects[indexPath.row]]) {
                 [self.selectedProjects removeObject:self.projects[indexPath.row]];
@@ -318,7 +365,8 @@ static void * kProjectsContext = &kProjectsContext;
 {
     NSArray *filterContexts = nil;
     NSArray *filterProjects = nil;
-    
+    NSArray *filterScopes = nil;
+
     if (self.haveContexts) {
         filterContexts = self.selectedContexts;
     }
@@ -326,9 +374,13 @@ static void * kProjectsContext = &kProjectsContext;
     if (self.haveProjects) {
         filterProjects = self.selectedProjects;
     }
-    
+
+    if (self.haveProjects) {
+        filterScopes = self.selectedScopes;
+    }
+
     if (self.shouldWaitForDone) {
-        [self.filterTarget filterForContexts:filterContexts projects:filterProjects];
+        [self.filterTarget filterForContexts:filterContexts projects:filterProjects scopes:filterScopes priorities:nil];
     }
 
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -352,7 +404,7 @@ static void * kProjectsContext = &kProjectsContext;
     } else if (context == kProjectsContext) {
         self.projects = [[taskBag.tasks valueForKeyPath:@"@distinctUnionOfArrays.projects"]
                          sortedArrayUsingSelector:@selector(compare:)];
-        
+
         [self.tableView reloadData];
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

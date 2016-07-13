@@ -51,6 +51,7 @@
 
 #import "Util.h"
 #import "Task.h"
+
 @interface BySDMFilter : NSObject <Filter>
 - (BOOL)apply:(id)object;
 @end
@@ -65,7 +66,10 @@
     NSDate *date = [Util dateFromString:input.prependedDate withFormat:txtDateFormat];
     //need to make this a proper date-based thing
     //need to have a way to turn it off and on.
-    if ([[NSDate date] timeIntervalSinceDate:date] < 24*60*60*7 || [input.originalText containsString:@"sdm:"]) {
+//    NSLog(@"[[NSDate date] timeIntervalSinceDate:date]: %.2f", [[NSDate date] timeIntervalSinceDate:date]);
+
+    if ([[NSDate date] timeIntervalSinceDate:date] < 24*60*60*14 || [input.originalText containsString:@"sdm:"] || input.priority.name == PriorityZ) {
+//        NSLog(@"yes");
         return YES;
     }
     
@@ -82,21 +86,32 @@
 								  contexts:(NSArray*)contexts 
 								  projects:(NSArray*)projects 
 									  text:(NSString*)text 
+                                    scopes:(NSArray *)scopes
 							 caseSensitive:(BOOL)caseSensitive {
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
 
 	AndFilter *filter = [[AndFilter alloc] init];
-    [filter addFilter:[[BySDMFilter alloc] init]];
+//    [filter addFilter:[[BySDMFilter alloc] init]];
 	if (priorities.count > 0) {
 		[filter addFilter:[[ByPriorityFilter alloc] initWithPriorities:priorities]];
 	}
 	
 	if (contexts.count > 0) {
-		[filter addFilter:[[ByContextFilter alloc] initWithContexts:contexts]];
+        NSLog(@"contexts: %@", contexts);
+        ByContextFilter *cFilter = [[ByContextFilter alloc] initWithContexts:contexts];
+        NSLog(@"cfilt: %@", cFilter);
+
+
+		[filter addFilter:cFilter];
 	}
 	
 	if (projects.count > 0) {
 		[filter addFilter:[[ByProjectFilter alloc] initWithProjects:projects]];
 	}
+
+    if (scopes.count > 0) {
+        [filter addFilter:[[BySDMFilter alloc] init]];
+    }
 	
 	if (text.length > 0) {
 		[filter addFilter:[[ByTextFilter alloc] initWithText:text caseSensitive:caseSensitive]];

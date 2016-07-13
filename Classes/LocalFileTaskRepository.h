@@ -49,6 +49,7 @@
 
 - (BOOL) todoFileModifiedSince:(NSDate*)date;
 - (BOOL) doneFileModifiedSince:(NSDate*)date;
+- (NSDate*) todoFileLastModified;
 - (void) create;
 - (void) purge;
 - (NSMutableArray*) load;

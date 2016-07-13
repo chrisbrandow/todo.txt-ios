@@ -55,6 +55,6 @@
  @param contexts An array of contexts on which to filter.
  @param projects An array of projects on which to filter.
  */
-- (void)filterForContexts:(NSArray *)contexts projects:(NSArray *)projects;
+- (void)filterForContexts:(NSArray *)contexts projects:(NSArray *)projects scopes:(NSArray *)scopes priorities:(NSArray *)priorities;
 
 @end

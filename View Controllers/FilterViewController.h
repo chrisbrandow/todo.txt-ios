@@ -51,6 +51,7 @@
 @property (weak, nonatomic) id<TaskFilterTarget> filterTarget;
 @property (strong, nonatomic) NSArray *initialSelectedContexts;
 @property (strong, nonatomic) NSArray *initialSelectedProjects;
+@property (strong, nonatomic) NSArray *initialSelectedScopes;
 @property (nonatomic) BOOL shouldWaitForDone;
 
 @end

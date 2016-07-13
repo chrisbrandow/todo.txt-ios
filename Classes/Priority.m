@@ -109,7 +109,7 @@ static NSArray* priorityArray = nil;
                              [Priority priorityWithName:PriorityW withCode:@"W" withListFormat:@"W" withDetailFormat:@"W" withFileFormat:@"(W)"],
                              [Priority priorityWithName:PriorityX withCode:@"X" withListFormat:@"X" withDetailFormat:@"X" withFileFormat:@"(X)"],
                              [Priority priorityWithName:PriorityY withCode:@"Y" withListFormat:@"Y" withDetailFormat:@"Y" withFileFormat:@"(Y)"],
-                             [Priority priorityWithName:PriorityZ withCode:@"Z" withListFormat:@"Z" withDetailFormat:@"Z" withFileFormat:@"(Z)"],
+                             [Priority priorityWithName:PriorityZ withCode:@"Z" withListFormat:@"⏳" withDetailFormat:@"Z" withFileFormat:@"(Z)"],
                              nil
                              ];
 		}

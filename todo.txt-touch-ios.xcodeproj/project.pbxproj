@@ -1458,9 +1458,10 @@
 					"\"$(SRCROOT)/Libraries/OCMock\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.todotxt1.Todo-txt-Touch";
+				PRODUCT_BUNDLE_IDENTIFIER = com.flouu.TodotxtTouch;
 				PRODUCT_NAME = Todo.txt;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "11d7af13-3227-4ff6-b658-ec343786d787";
+				PROVISIONING_PROFILE_SPECIFIER = "VE26CNW5ZX/Todo Txt Dev";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1496,9 +1497,9 @@
 					"\"$(SRCROOT)/Libraries/OCMock\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.todotxt1.Todo-txt-Touch";
+				PRODUCT_BUNDLE_IDENTIFIER = com.flouu.TodotxtTouch;
 				PRODUCT_NAME = Todo.txt;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b8d3469e-138f-4d67-a354-7370d95e0495";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -1555,9 +1556,9 @@
 					"\"$(SRCROOT)/Libraries/OCMock\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.todotxt1.Todo-txt-Touch";
+				PRODUCT_BUNDLE_IDENTIFIER = com.flouu.TodotxtTouch;
 				PRODUCT_NAME = Todo.txt;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b8d3469e-138f-4d67-a354-7370d95e0495";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1614,9 +1615,9 @@
 					"\"$(SRCROOT)/Libraries/OCMock\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.todotxt1.Todo-txt-Touch";
+				PRODUCT_BUNDLE_IDENTIFIER = com.flouu.TodotxtTouch;
 				PRODUCT_NAME = Todo.txt;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "b8d3469e-138f-4d67-a354-7370d95e0495";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "";

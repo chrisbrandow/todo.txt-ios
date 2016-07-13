@@ -119,6 +119,41 @@ static Task* find(NSArray *tasks, Task *task) {
 	if (!self.tasks || [self todoFileModifiedSince:self.lastReload]) {
 		[self.localTaskRepository create];
 		self.tasks = [self.localTaskRepository load];
+
+        //get current date and hour
+        //find date for hour = 7am with same month/day
+        //if last mod < that refresh
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        [dateFormatter setDateFormat:@"mmddyyyy"];
+        NSDate *date = [NSDate date];
+//        NSCalendar *lastModC = [NSCalendar cal]
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:(NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:date];
+        NSInteger hour = [components hour];
+        NSInteger minute = [components minute];
+        NSInteger month = [components month];
+        NSInteger day = [components day];
+        NSLog(@"hour: %zd", hour);
+        NSLog(@"minue: %zd", minute);
+        NSLog(@"month: %zd", month);
+        NSLog(@"day: %zd", day);
+
+        //create NSDate iwth month/day/year/hour=0/minute=1
+        //compare
+
+
+
+
+        NSDate *lastModDate = [(LocalFileTaskRepository *)self.localTaskRepository todoFileLastModified];
+        NSLog(@"last: %.2f", [lastModDate timeIntervalSinceNow]);
+        if (-[lastModDate timeIntervalSinceNow] > 60*60) {
+            for (Task *t  in self.tasks) {
+                if (t.isPriortyToday) {
+                    [t undoPriorityToday];
+                }
+            }
+        }
+
 		self.lastReload = [NSDate date];
 		[self updateBadge];
 	}
@@ -203,8 +238,11 @@ static Task* find(NSArray *tasks, Task *task) {
 
 - (NSArray*) tasksWithFilter:(id<Filter>)filter withSortOrder:(Sort*)sortOrder {
 	NSMutableArray *localTasks = [NSMutableArray arrayWithCapacity:[_tasks count]];
+//    NSLog(@"imp filter: %@", filter);
+
 	if (filter != nil) {
 		for (Task* task in _tasks) {
+
 			if ([filter apply:task]) {
 				[localTasks addObject:task];
 			}

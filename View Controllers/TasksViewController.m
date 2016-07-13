@@ -54,6 +54,7 @@
 #import "TasksViewController.h"
 #import "TodoTxtAppDelegate.h"
 #import "UIColor+CustomColors.h"
+#import "Priority.h"
 
 #import "IASKAppSettingsViewController.h"
 
@@ -77,6 +78,7 @@ static CGFloat const kMinCellHeight = 44;
 @interface TasksViewController () <IASKSettingsDelegate>
 
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *filterBarButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *todayBarButton;
 @property (strong, nonatomic) IBOutlet UILabel *emptyLabel;
 @property (nonatomic, strong) NSArray *tasks;
 @property (nonatomic, strong) Sort *sort;
@@ -93,7 +95,10 @@ static CGFloat const kMinCellHeight = 44;
 // so they can be shown as selected in the filter view if it is shown again.
 @property (nonatomic, strong) NSArray *lastFilteredContexts;
 @property (nonatomic, strong) NSArray *lastFilteredProjects;
+@property (nonatomic, strong) NSArray *lastFilteredScopes;
+@property (nonatomic, strong) NSArray *lastFilteredPriorities;
 
+@property (nonatomic, copy) void (^firstRun)();
 @property (nonatomic) BOOL needSync;
 
 // TODO: refactor app delegate and remove me
@@ -121,11 +126,13 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 }
 
 - (void) reloadData:(NSNotification *) notification {
+    NSLog(@"%s %@", __PRETTY_FUNCTION__, notification);
+
 	// reload global tasklist from disk
 	[self.appDelegate.taskBag reload];	
 
 	// reload main tableview data
-    self.filter = [FilterFactory getAndFilterWithPriorities:nil contexts:nil projects:nil text:nil caseSensitive:NO];
+//    self.filter = [FilterFactory getAndFilterWithPriorities:nil contexts:nil projects:nil text:nil scopes:nil caseSensitive:NO];
 
 	self.tasks = [self.appDelegate.taskBag tasksWithFilter:nil withSortOrder:self.sort];
 	[self.tableView reloadData];
@@ -133,7 +140,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 	// reload searchbar tableview data if necessary
 	if (self.savedSearchTerm)
 	{	
-		id<Filter> filter = [FilterFactory getAndFilterWithPriorities:nil contexts:nil projects:nil text:self.savedSearchTerm caseSensitive:NO];
+        id<Filter> filter = [FilterFactory getAndFilterWithPriorities:nil contexts:nil projects:nil text:self.savedSearchTerm scopes:nil caseSensitive:NO];
 		self.searchResults = [self.appDelegate.taskBag tasksWithFilter:filter withSortOrder:self.sort];
 		[self.searchDisplayController.searchResultsTableView reloadData];
 	}
@@ -147,7 +154,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 	}
 }
 
-- (Task*) taskForTable:(UITableView*)tableView atIndex:(NSUInteger)index {
+- (Task*)taskForTable:(UITableView*)tableView atIndex:(NSUInteger)index {
 	if(tableView == self.searchDisplayController.searchResultsTableView) {
 		return [self.searchResults objectAtIndex:index];
 	} else {
@@ -218,7 +225,12 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 	}
 
     self.emptyLabel.text = kEmptyFileMessage;
-    
+    __weak TasksViewController *weakSelf = self;
+    self.firstRun = ^void() {
+        weakSelf.lastFilteredScopes = @[@"Last Two Weeks"];
+        [weakSelf toggleToday];
+};
+
     [self.tableView registerClass:[TaskCell class] forCellReuseIdentifier:kCellIdentifier];
 }
 
@@ -227,8 +239,13 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 	NSLog(@"viewWillAppear - tableview");
 
 	[self hideSearchBar:NO];
-	[self reloadData:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self 
+
+    if (self.firstRun) {
+        self.firstRun();
+        _firstRun = nil;
+    }
+    [self reloadData:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadData:) 
 												 name:kTodoChangedNotification 
 											   object:nil];
@@ -275,8 +292,14 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 #pragma mark -
 #pragma mark Overridden getters/setters
 
+//- (void)setFilter:(id<Filter>)filter {
+//    _filter = filter;
+//    [self.appDelegate.taskBag tasksWithFilter:filter withSortOrder:self.sort];
+//}
 - (NSArray *)filteredTasks
 {
+//    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     return [self.appDelegate.taskBag tasksWithFilter:self.filter withSortOrder:self.sort];
 }
 
@@ -359,6 +382,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"auto_archive_preference"]) {
             [taskBag archive];
         }
+NSLog(@"1");
 
         [self reloadData:nil];
         [self.appDelegate pushToRemoteWithCompletion:nil];
@@ -379,7 +403,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"auto_archive_preference"]) {
             [taskBag archive];
         }
-
+NSLog(@"2");
         [self reloadData:nil];
         [self.appDelegate pushToRemoteWithCompletion:nil];
         
@@ -392,7 +416,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 
 - (void)handleSearchForTerm:(NSString *)searchTerm {
 	self.savedSearchTerm = searchTerm;
-	id<Filter> filter = [FilterFactory getAndFilterWithPriorities:nil contexts:nil projects:nil text:self.savedSearchTerm caseSensitive:NO];
+    id<Filter> filter = [FilterFactory getAndFilterWithPriorities:nil contexts:nil projects:nil text:self.savedSearchTerm scopes:nil caseSensitive:NO];
 	self.searchResults = [self.appDelegate.taskBag tasksWithFilter:filter withSortOrder:self.sort];
 }
 
@@ -407,6 +431,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
 	self.savedSearchTerm = nil;
+    NSLog(@"3");
 	[self reloadData:nil];
 }
 
@@ -421,6 +446,16 @@ shouldReloadTableForSearchString:(NSString *)searchString
     }
 }
 
+- (IBAction)TodayButtonPressed:(UIBarButtonItem *)sender {
+    [self toggleToday];
+}
+
+- (void)toggleToday
+{
+    self.lastFilteredPriorities = (self.lastFilteredPriorities.count) ? nil : @[[Priority byName:PriorityZ]];
+    [self filterForContexts:self.lastFilteredContexts projects:self.lastFilteredProjects scopes:self.lastFilteredScopes priorities:self.lastFilteredPriorities];
+    self.todayBarButton.title = (self.lastFilteredPriorities.count) ? @"⏳" : @"📄";
+}
 
 - (IBAction)addButtonPressed:(id)sender {
 	NSLog(@"addButtonPressed called");
@@ -516,6 +551,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
                 NSLog(@"Archiving...");
 				[self.appDelegate displayNotification:@"Archiving completed tasks..."];
 				[self.appDelegate.taskBag archive];
+                NSLog(@"4");
 				[self reloadData:nil];
 				[self.appDelegate pushToRemoteWithCompletion:nil];
 				break;
@@ -539,6 +575,8 @@ shouldReloadTableForSearchString:(NSString *)searchString
 										   if (selectedIndex >= 0) {
 											   self.sort = [Sort byName:selectedIndex];
 											   [self setSortOrderPref];
+                                               NSLog(@"5");
+
 											   [self reloadData:nil];
 											   [self hideSearchBar:NO];
 										   }									   }
@@ -563,6 +601,8 @@ shouldReloadTableForSearchString:(NSString *)searchString
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    NSLog(@"5");
+
     [self reloadData:nil];
     [self hideSearchBar:YES];
 	[self.actionSheetPicker hidePickerWithCancelAction];
@@ -584,6 +624,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
         vc.filterTarget = self;
         vc.initialSelectedContexts = self.lastFilteredContexts;
         vc.initialSelectedProjects = self.lastFilteredProjects;
+        vc.initialSelectedScopes = self.lastFilteredScopes;
         vc.shouldWaitForDone = YES;
     }
     // nothing to be done for kAddTaskSegueIdentifier
@@ -591,12 +632,15 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 #pragma mark - TaskFilterable methods
 
-- (void)filterForContexts:(NSArray *)contexts projects:(NSArray *)projects
+- (void)filterForContexts:(NSArray *)contexts projects:(NSArray *)projects scopes:(NSArray *)scopes priorities:(NSArray *)priorities
 {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
     self.lastFilteredContexts = [NSArray arrayWithArray:contexts];
     self.lastFilteredProjects = [NSArray arrayWithArray:projects];
-    
-    self.filter = [FilterFactory getAndFilterWithPriorities:nil contexts:contexts projects:projects text:nil caseSensitive:NO];
+    self.lastFilteredScopes = [NSArray arrayWithArray:scopes];
+
+    self.filter = [FilterFactory getAndFilterWithPriorities:self.lastFilteredPriorities contexts:contexts projects:projects text:nil scopes:scopes caseSensitive:NO];
     
     if (contexts.count || projects.count) {
         self.emptyLabel.text = kNoFilterResultsMessage;

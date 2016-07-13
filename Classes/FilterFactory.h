@@ -50,7 +50,8 @@
 + (id <Filter>) getAndFilterWithPriorities:(NSArray*)priorities 
 								  contexts:(NSArray*)contexts 
 								  projects:(NSArray*)projects 
-									  text:(NSString*)text 
+									  text:(NSString*)text
+                                    scopes:(NSArray *)scopes
 							 caseSensitive:(BOOL)caseSensitive;
 
 @end

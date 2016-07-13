@@ -58,6 +58,8 @@
 }
 
 - (void) addFilter:(id<Filter>)filter {
+    NSLog(@"add filter: %@", [filter class]);
+
 	if (filter) {
 		[filters addObject:filter];
 	}
@@ -79,5 +81,12 @@
 	return YES;
 }
 
+- (NSString *)description {
+    NSString *filtersString = [NSString stringWithFormat:@"%@",[self class]];
+    for (id<Filter> filter in filters) {
+        filtersString = [filtersString stringByAppendingString:[NSString stringWithFormat:@"%@",[filter class]]];
+    }
+    return filtersString;
+}
 
 @end
