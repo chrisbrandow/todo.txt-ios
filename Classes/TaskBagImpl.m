@@ -116,7 +116,10 @@ static Task* find(NSArray *tasks, Task *task) {
 }
 
 - (void) reload {
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
 	if (!self.tasks || [self todoFileModifiedSince:self.lastReload]) {
+        NSLog(@"is reloading");
 		[self.localTaskRepository create];
 		self.tasks = [self.localTaskRepository load];
 
@@ -157,6 +160,15 @@ static Task* find(NSArray *tasks, Task *task) {
 		self.lastReload = [NSDate date];
 		[self updateBadge];
 	}
+}
+
+- (void)setTasksToToday:(BOOL)orNot
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+
+    for (Task *task in self.tasks) {
+        [task undoPriorityToday];
+    }
 }
 
 - (void) reloadWithFile:(NSString*)file {

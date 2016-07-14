@@ -123,14 +123,14 @@
 
 - (void)setPriorityToday
 {
-    if (!completed && priority.name == PriorityNone) {
+    if (!completed && priority.name != PriorityZ) {
         priority = [Priority byName:PriorityZ];
     }
 }
 
 - (void)undoPriorityToday
 {
-    if (!completed && priority.name != PriorityNone) {
+    if (!completed && priority.name == PriorityZ) {
         priority = [Priority byName:PriorityNone];
     }
 }

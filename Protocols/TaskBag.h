@@ -61,7 +61,7 @@
 - (Task*) taskAtIndex:(NSUInteger)index;
 - (NSUInteger) indexOfTask:(Task*)task;
 - (NSArray*) tasksWithFilter:(id<Filter>)filter withSortOrder:(Sort*)sortOrder;
-
+- (void)setTasksToToday:(BOOL)orNot;
 @property (readonly) int size;
 @property (nonatomic, readonly) NSArray *tasks;
 @property (nonatomic, readonly) NSArray *projects;

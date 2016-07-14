@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="q98-oM-s57">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11163.2" systemVersion="15F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="q98-oM-s57">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11133"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Filter View Controller-->
@@ -22,7 +23,7 @@
                     <navigationItem key="navigationItem" id="dO2-cj-bR2">
                         <nil key="title"/>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="TAk-NK-2H4">
-                            <rect key="frame" x="72" y="7" width="176" height="31"/>
+                            <rect key="frame" x="72" y="6.5" width="176" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="All"/>
@@ -46,9 +47,9 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="qDN-97-LEn" customClass="PGTableViewWithEmptyView">
                         <rect key="frame" x="0.0" y="64" width="768" height="916"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <searchBar key="tableHeaderView" contentMode="redraw" id="0yi-6g-kYU">
-                            <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                            <frame key="frameInset" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
@@ -94,21 +95,21 @@
                     <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A message to show." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="294" translatesAutoresizingMaskIntoConstraints="NO" id="T6N-S6-a9J">
-                            <rect key="frame" x="237" y="408" width="294" height="70"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A message to show.   this is another" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="294" translatesAutoresizingMaskIntoConstraints="NO" id="T6N-S6-a9J">
                             <constraints>
-                                <constraint firstAttribute="width" constant="294" id="Jq1-HF-Zf1"/>
-                                <constraint firstAttribute="height" constant="70" id="b1J-NU-Vaw"/>
+                                <constraint firstAttribute="height" constant="200" id="b1J-NU-Vaw"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="17"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
+                        <constraint firstItem="T6N-S6-a9J" firstAttribute="leading" secondItem="6ej-HE-d4g" secondAttribute="leading" constant="10" id="Hbs-f0-gB4"/>
                         <constraint firstItem="T6N-S6-a9J" firstAttribute="centerX" secondItem="6ej-HE-d4g" secondAttribute="centerX" id="XBI-1f-BgR"/>
                         <constraint firstItem="T6N-S6-a9J" firstAttribute="top" secondItem="6ej-HE-d4g" secondAttribute="top" constant="408" id="ZT6-Ts-76T"/>
+                        <constraint firstAttribute="trailing" secondItem="T6N-S6-a9J" secondAttribute="trailing" constant="10" id="mCR-5M-67H"/>
                     </constraints>
                 </view>
                 <searchDisplayController id="ERI-sh-0UM">
@@ -174,9 +175,8 @@
                         <rect key="frame" x="0.0" y="64" width="768" height="960"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eZX-Jy-oVR" customClass="SSTextView">
-                                <rect key="frame" x="0.0" y="-32" width="768" height="1024"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eZX-Jy-oVR" customClass="SSTextView">
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <connections>
@@ -184,7 +184,7 @@
                                 </connections>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="eZX-Jy-oVR" firstAttribute="top" secondItem="2gY-wz-ue0" secondAttribute="top" id="9wQ-ys-1Wh"/>
                             <constraint firstItem="eZX-Jy-oVR" firstAttribute="bottom" secondItem="2gY-wz-ue0" secondAttribute="bottom" id="IeC-g3-dvU"/>
@@ -276,10 +276,8 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S2T-wp-V1i" userLabel="Centered View">
-                                <rect key="frame" x="192" y="261" width="384" height="502"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mcW-v8-Z9S">
-                                        <rect key="frame" x="12" y="241" width="360" height="90"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="90" id="e8B-4T-mkb"/>
                                             <constraint firstAttribute="width" constant="360" id="vC3-cQ-GGO"/>
@@ -287,27 +285,25 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <inset key="imageEdgeInsets" minX="-30" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="Log in to Dropbox" image="dropbox_logo.png" backgroundImage="green.png">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="loginButtonPressed:" destination="e5C-aC-Aod" eventType="touchUpInside" id="hbl-Us-U2G"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Todo.txt" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="f15-lF-g0U">
-                                        <rect key="frame" x="12" y="178" width="173" height="41"/>
                                         <fontDescription key="fontDescription" name="CourierNewPS-BoldMT" family="Courier New" pointSize="36"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WELCOME TO" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gu3-9H-8W1">
-                                        <rect key="frame" x="12" y="152" width="173" height="28"/>
                                         <fontDescription key="fontDescription" name="Kailasa" family="Kailasa" pointSize="17"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="502" id="FVt-HY-JQ5"/>
                                     <constraint firstAttribute="centerY" secondItem="mcW-v8-Z9S" secondAttribute="centerY" constant="-35" id="HCm-bN-hgU"/>
@@ -321,7 +317,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="centerY" secondItem="S2T-wp-V1i" secondAttribute="centerY" id="QzF-3h-lAc"/>
                             <constraint firstItem="S2T-wp-V1i" firstAttribute="centerX" secondItem="WXm-yb-yJF" secondAttribute="centerX" id="yQ8-JC-Jis"/>
@@ -338,8 +334,13 @@
         <image name="dropbox_logo.png" width="50" height="50"/>
         <image name="green.png" width="1" height="1"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="Fka-eT-1jp"/>
         <segue reference="0C1-Ko-UCJ"/>
-        <segue reference="I3C-Wc-7PQ"/>
     </inferredMetricsTieBreakers>
 </document>

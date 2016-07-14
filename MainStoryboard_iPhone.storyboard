@@ -28,11 +28,6 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems>
-                        <barButtonItem title="Sort" id="zDX-AB-di9">
-                            <connections>
-                                <action selector="sortButtonPressed:" destination="yWi-bb-L3m" id="dXE-3D-5cr"/>
-                            </connections>
-                        </barButtonItem>
                         <barButtonItem title="📄" id="KCz-OP-Eka">
                             <connections>
                                 <action selector="TodayButtonPressed:" destination="yWi-bb-L3m" id="6u2-Bn-Wfn"/>
@@ -53,6 +48,11 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Tasks" id="1Lp-5z-5Cg">
+                        <barButtonItem key="leftBarButtonItem" title="Sort" id="zDX-AB-di9">
+                            <connections>
+                                <action selector="sortButtonPressed:" destination="yWi-bb-L3m" id="dXE-3D-5cr"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="19-gear.png" style="plain" id="IAu-7p-FV3">
                             <connections>
                                 <action selector="settingsButtonPressed:" destination="yWi-bb-L3m" id="MNu-5b-A7a"/>
@@ -75,10 +75,9 @@
                     <subviews>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="A message to show." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="294" translatesAutoresizingMaskIntoConstraints="NO" id="XTZ-Db-rgB">
                             <constraints>
-                                <constraint firstAttribute="height" constant="70" id="6nB-8W-PEw"/>
-                                <constraint firstAttribute="width" constant="294" id="iov-rO-b6z"/>
+                                <constraint firstAttribute="height" constant="200" id="6nB-8W-PEw"/>
                             </constraints>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="17"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -86,6 +85,8 @@
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="XTZ-Db-rgB" firstAttribute="centerX" secondItem="HcP-t0-btj" secondAttribute="centerX" id="3iH-lr-e6k"/>
+                        <constraint firstAttribute="trailing" secondItem="XTZ-Db-rgB" secondAttribute="trailing" constant="10" id="DRV-Gk-lE2"/>
+                        <constraint firstItem="XTZ-Db-rgB" firstAttribute="leading" secondItem="HcP-t0-btj" secondAttribute="leading" constant="10" id="iC9-VO-YPR"/>
                         <constraint firstItem="XTZ-Db-rgB" firstAttribute="top" secondItem="HcP-t0-btj" secondAttribute="top" constant="68" id="wMX-vl-o1t"/>
                     </constraints>
                 </view>
@@ -282,7 +283,7 @@
                             </connections>
                         </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="oa1-Vs-TxR">
-                            <rect key="frame" x="96" y="6.5" width="128" height="31"/>
+                            <rect key="frame" x="124" y="7" width="128" height="31"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="All"/>

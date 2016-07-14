@@ -55,6 +55,7 @@
 #import "TodoTxtAppDelegate.h"
 #import "UIColor+CustomColors.h"
 #import "Priority.h"
+#import "Util.h"
 
 #import "IASKAppSettingsViewController.h"
 
@@ -225,11 +226,35 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 	}
 
     self.emptyLabel.text = kEmptyFileMessage;
+    NSString *yesterdayDateString = [Util stringFromDate:[NSDate dateWithTimeIntervalSinceNow:(-24*60*60)] withFormat:txtDateFormat];
+    NSLog(@"yesterday: %@", yesterdayDateString);
+
+    NSString *todayDateString = [Util stringFromDate:[NSDate date] withFormat:txtDateFormat];
+
+    NSString *lastViewedDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastViewedDate"];
+    NSLog(@"today: %@", todayDateString);
+    NSLog(@"last: %@", lastViewedDate);
+    NSLog(@"days equal: %zd", [todayDateString isEqualToString:lastViewedDate]);
     __weak TasksViewController *weakSelf = self;
-    self.firstRun = ^void() {
-        weakSelf.lastFilteredScopes = @[@"Last Two Weeks"];
-        [weakSelf toggleToday];
-};
+
+    if ([todayDateString isEqualToString:lastViewedDate]) {
+        NSLog(@"toggle to today");
+        self.title = @"Today";
+        self.firstRun = ^void() {
+            weakSelf.lastFilteredScopes = @[@"Last Two Weeks"];
+            [weakSelf toggleToday];
+        };
+
+    } else {
+        self.title = @"Recent";
+        self.firstRun = ^void() {
+            weakSelf.lastFilteredScopes = @[@"Last Two Weeks"];
+            [weakSelf.appDelegate.taskBag reload];
+            [weakSelf.appDelegate.taskBag setTasksToToday:NO];
+            [weakSelf toggleToday];
+        };
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:todayDateString forKey:@"lastViewedDate"];
 
     [self.tableView registerClass:[TaskCell class] forCellReuseIdentifier:kCellIdentifier];
 }
@@ -252,7 +277,6 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
     UIImage *filterBack = (self.lastFilteredContexts.count || self.lastFilteredProjects.count) ? [self backImageWithColor:[UIColor colorWithWhite:.7 alpha:1.0]] : [self backImageWithColor:self.view.backgroundColor];
 
     [self.filterBarButtonItem setBackgroundImage:filterBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
-
 }
 
 - (void) viewDidAppear:(BOOL)animated {	
@@ -292,10 +316,6 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 #pragma mark -
 #pragma mark Overridden getters/setters
 
-//- (void)setFilter:(id<Filter>)filter {
-//    _filter = filter;
-//    [self.appDelegate.taskBag tasksWithFilter:filter withSortOrder:self.sort];
-//}
 - (NSArray *)filteredTasks
 {
 //    NSLog(@"%s", __PRETTY_FUNCTION__);
@@ -601,8 +621,6 @@ shouldReloadTableForSearchString:(NSString *)searchString
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    NSLog(@"5");
-
     [self reloadData:nil];
     [self hideSearchBar:YES];
 	[self.actionSheetPicker hidePickerWithCancelAction];
@@ -634,8 +652,6 @@ shouldReloadTableForSearchString:(NSString *)searchString
 
 - (void)filterForContexts:(NSArray *)contexts projects:(NSArray *)projects scopes:(NSArray *)scopes priorities:(NSArray *)priorities
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     self.lastFilteredContexts = [NSArray arrayWithArray:contexts];
     self.lastFilteredProjects = [NSArray arrayWithArray:projects];
     self.lastFilteredScopes = [NSArray arrayWithArray:scopes];
@@ -644,6 +660,8 @@ shouldReloadTableForSearchString:(NSString *)searchString
     
     if (contexts.count || projects.count) {
         self.emptyLabel.text = kNoFilterResultsMessage;
+    } else if (self.lastFilteredPriorities.count) {
+        self.emptyLabel.text = @"No remaining tasks for today.\n\n\nTap ⏳ below to see active tasks";
     } else {
         self.emptyLabel.text = kEmptyFileMessage;
     }
