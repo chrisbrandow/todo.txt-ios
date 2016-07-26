@@ -246,11 +246,12 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
         };
 
     } else {
-        self.title = @"Recent";
+        self.title =  [NSString stringWithFormat:@"%@-%@", lastViewedDate, todayDateString];// @"Recent";
         self.firstRun = ^void() {
             weakSelf.lastFilteredScopes = @[@"Last Two Weeks"];
             [weakSelf.appDelegate.taskBag reload];
             [weakSelf.appDelegate.taskBag setTasksToToday:NO];
+            [weakSelf.appDelegate.taskBag archive];
             [weakSelf toggleToday];
         };
     }
@@ -661,7 +662,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
     if (contexts.count || projects.count) {
         self.emptyLabel.text = kNoFilterResultsMessage;
     } else if (self.lastFilteredPriorities.count) {
-        self.emptyLabel.text = @"No remaining tasks for today.\n\n\nTap ⏳ below to see active tasks";
+        self.emptyLabel.text = @"No remaining tasks for today.\n\n\nTap ⏳ below to see active tasks\n\nif this seems wrong, check title above";
     } else {
         self.emptyLabel.text = kEmptyFileMessage;
     }
