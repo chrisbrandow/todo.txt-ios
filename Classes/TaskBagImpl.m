@@ -250,7 +250,7 @@ static Task* find(NSArray *tasks, Task *task) {
 	return localTasks;
 }
 
-- (int) size {
+- (NSInteger) size {
     return [self.tasks count];
 }
 
