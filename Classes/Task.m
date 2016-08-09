@@ -182,7 +182,7 @@
 	}
 
 	[ret appendString:text];
-	
+
 	return [ret copy];
 }
 

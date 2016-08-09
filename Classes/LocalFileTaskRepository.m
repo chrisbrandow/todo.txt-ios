@@ -121,7 +121,7 @@
 }
 
 - (NSMutableArray*) load {
-    [self create];    
+    [self create];
     NSMutableArray* tasks = [TaskIo loadTasksFromFile:[LocalFileTaskRepository todoFilename]];
 	return tasks;
 }
@@ -133,7 +133,7 @@
 }
 
 - (void) archive:(NSArray*)tasks {
-    NSMutableArray *completedTasks = [NSMutableArray arrayWithCapacity:tasks.count];	
+    NSMutableArray *completedTasks = [NSMutableArray arrayWithCapacity:tasks.count];
 	NSMutableArray *incompleteTasks = [NSMutableArray arrayWithCapacity:tasks.count];	
 
 	for (Task *task in tasks) {

@@ -73,7 +73,7 @@ static Task* find(NSArray *tasks, Task *task) {
 
 - (id) initWithRepository:(id <LocalTaskRepository>)repo {
     self = [super init];
-    
+
 	if (self) {
         self.localTaskRepository = repo;
 	}
@@ -116,40 +116,20 @@ static Task* find(NSArray *tasks, Task *task) {
 }
 
 - (void) reload {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
-	if (!self.tasks || [self todoFileModifiedSince:self.lastReload]) {
+    if (!self.tasks || [self todoFileModifiedSince:self.lastReload]) {
         NSLog(@"is reloading");
 		[self.localTaskRepository create];
 		self.tasks = [self.localTaskRepository load];
 
-        //get current date and hour
-        //find date for hour = 7am with same month/day
-        //if last mod < that refresh
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"mmddyyyy"];
-        NSDate *date = [NSDate date];
-//        NSCalendar *lastModC = [NSCalendar cal]
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSDateComponents *components = [calendar components:(NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:date];
-        NSInteger hour = [components hour];
-        NSInteger minute = [components minute];
-        NSInteger month = [components month];
-        NSInteger day = [components day];
-        NSLog(@"hour: %zd", hour);
-        NSLog(@"minue: %zd", minute);
-        NSLog(@"month: %zd", month);
-        NSLog(@"day: %zd", day);
-
-        //create NSDate iwth month/day/year/hour=0/minute=1
-        //compare
-
-
-
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
 
         NSDate *lastModDate = [(LocalFileTaskRepository *)self.localTaskRepository todoFileLastModified];
-        NSLog(@"last: %.2f", [lastModDate timeIntervalSinceNow]);
-        if (-[lastModDate timeIntervalSinceNow] > 60*60) {
+        NSString *todayString = [dateFormatter stringFromDate:[NSDate date]];
+        NSString *lastModString = [dateFormatter stringFromDate:lastModDate];
+
+
+        if (![todayString isEqualToString:lastModString]) {
             for (Task *t  in self.tasks) {
                 if (t.isPriortyToday) {
                     [t undoPriorityToday];
@@ -164,8 +144,6 @@ static Task* find(NSArray *tasks, Task *task) {
 
 - (void)setTasksToToday:(BOOL)orNot
 {
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     for (Task *task in self.tasks) {
         [task undoPriorityToday];
     }
