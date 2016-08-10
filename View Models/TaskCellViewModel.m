@@ -180,7 +180,7 @@
 
 - (UIFont *)taskFont
 {
-    return [UIFont systemFontOfSize:14.0];
+    return [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:14.0];;
 }
 
 - (UIColor *)taskColor

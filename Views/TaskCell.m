@@ -112,7 +112,7 @@ static void * kShowDateContext = &kShowDateContext;
         // Set the priorityLabel and ageLabel fonts.  The textView's font is set by
         // the controller or view model
         priorityLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:14.0];
-        ageLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:10.0];
+        ageLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:10.0];
         
         ageLabel.textColor = [UIColor lightGrayColor];
         
@@ -123,7 +123,6 @@ static void * kShowDateContext = &kShowDateContext;
         
         textView.contentInset = contentInset;
         textView.userInteractionEnabled = NO;
-        
         self.priorityLabel = priorityLabel;
         self.ageLabel = ageLabel;
         self.taskTextView = textView;
@@ -136,7 +135,7 @@ static void * kShowDateContext = &kShowDateContext;
         
         NSDictionary *metrics = @{ @"bigSpacing" : @(kBigSpacing),
                                    @"boundsSpacing" : @(kSmallBoundsSpacing),
-                                   @"priorityLabelTopSpacing" : @(kSmallBoundsSpacing-2),
+                                   @"priorityLabelTopSpacing" : @(kSmallBoundsSpacing+2),
                                    @"spacing" : @(kSmallSpacing),
                                    @"taskAndAgeVerticalSpacing" : @(kTaskAndAgeVerticalSpacing),
                                    @"ageLabelWidth" : @(kAgeLabelWidth) };

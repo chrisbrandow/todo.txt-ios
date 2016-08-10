@@ -334,7 +334,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 
 - (UIFont *)mainTextFont
 {
-    return [UIFont fontWithName:@"AvenirNext-Regular" size:14];
+    return [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:14];
 }
 
 #pragma mark -
@@ -662,7 +662,7 @@ shouldReloadTableForSearchString:(NSString *)searchString
     if (contexts.count || projects.count) {
         self.emptyLabel.text = kNoFilterResultsMessage;
     } else if (self.lastFilteredPriorities.count) {
-        self.emptyLabel.text = @"No remaining tasks for today.\n\n\nTap ⏳ below to see active tasks\n\nif this seems wrong, check title above";
+        self.emptyLabel.text = @"No remaining tasks for today.\n\n\nTap ⏳ below to see all active tasks\n\nTo see older tasks tap filter";
     } else {
         self.emptyLabel.text = kEmptyFileMessage;
     }
