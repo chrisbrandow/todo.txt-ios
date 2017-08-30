@@ -21,7 +21,9 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		272C29BC1D5E5B730092A05C /* Icon_167.png in Resources */ = {isa = PBXBuildFile; fileRef = 272C29BB1D5E5B730092A05C /* Icon_167.png */; };
 		27CE86501D5BA4EC0033B95E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 27CE864F1D5BA4EC0033B95E /* Launch Screen.storyboard */; };
+		27CE86521D5BDFE90033B95E /* Icon-164.png in Resources */ = {isa = PBXBuildFile; fileRef = 27CE86511D5BDFE90033B95E /* Icon-164.png */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		33714DB015D45F4B002F1BED /* Icon-144.png in Resources */ = {isa = PBXBuildFile; fileRef = 33714DAF15D45F4B002F1BED /* Icon-144.png */; };
 		33766B93160129E6000C25B0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 33766B92160129E6000C25B0 /* Default-568h@2x.png */; };
@@ -212,7 +214,9 @@
 		1D3623250D0F684500981E51 /* TodoTxtAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TodoTxtAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* Todo.txt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todo.txt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		272C29BB1D5E5B730092A05C /* Icon_167.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon_167.png; sourceTree = "<group>"; };
 		27CE864F1D5BA4EC0033B95E /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		27CE86511D5BDFE90033B95E /* Icon-164.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-164.png"; sourceTree = "<group>"; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* todo_txt_touch_ios_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = todo_txt_touch_ios_Prefix.pch; sourceTree = "<group>"; };
@@ -592,8 +596,10 @@
 				33B7513015F6F2660072D8F9 /* Default-Landscape@2x~ipad.png */,
 				33B7512815F6EDEE0072D8F9 /* icon_114.png */,
 				33F8F18B17F1E0D80065548B /* icon_120.png */,
+				272C29BB1D5E5B730092A05C /* Icon_167.png */,
 				7D57054312F89F1900BB5E8D /* Icon-72.png */,
 				33714DAF15D45F4B002F1BED /* Icon-144.png */,
+				27CE86511D5BDFE90033B95E /* Icon-164.png */,
 				33F8F19217F1E1100065548B /* icon_152.png */,
 				7D57054412F89F1900BB5E8D /* Icon-Small-50.png */,
 				7D57054512F89F1900BB5E8D /* Icon-Small.png */,
@@ -1126,6 +1132,7 @@
 				7D57054712F89F1900BB5E8D /* Icon-72.png in Resources */,
 				7D57054812F89F1900BB5E8D /* Icon-Small-50.png in Resources */,
 				7D57054912F89F1900BB5E8D /* Icon-Small.png in Resources */,
+				272C29BC1D5E5B730092A05C /* Icon_167.png in Resources */,
 				7D57054A12F89F1900BB5E8D /* Icon.png in Resources */,
 				88F1AB2E1412E20D00AB3D18 /* todotxt_touch_256.png in Resources */,
 				88F1AB391412EA1700AB3D18 /* Default.png in Resources */,
@@ -1136,6 +1143,7 @@
 				5910DBD71424014800BB2D68 /* InAppSettings.bundle in Resources */,
 				33F8F18C17F1E0D80065548B /* icon_120.png in Resources */,
 				5910DBD9142406BD00BB2D68 /* 19-gear.png in Resources */,
+				27CE86521D5BDFE90033B95E /* Icon-164.png in Resources */,
 				5910DBDB1424078D00BB2D68 /* 19-gear@2x.png in Resources */,
 				5C402B6417EE981300DB3F84 /* dropbox_logo.png in Resources */,
 				33CF5E0A144410B90050F60D /* Entitlements.entitlements in Resources */,
@@ -1463,7 +1471,7 @@
 				INFOPLIST_FILE = "todo_txt_touch_ios-Info.plist";
 				INFOPLIST_PREFIX_HEADER = DropboxApiKey.h;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1475,7 +1483,7 @@
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 			};
 			name = Debug;
@@ -1504,7 +1512,7 @@
 				INFOPLIST_FILE = "todo_txt_touch_ios-Info.plist";
 				INFOPLIST_PREFIX_HEADER = DropboxApiKey.h;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1514,8 +1522,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.flouu.TodotxtTouch;
 				PRODUCT_NAME = Todo.txt;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = NO;
 			};
@@ -1545,7 +1554,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_ENTITLEMENTS = Entitlements.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Christopher Brandow (Q3P7BHX2BC)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = VE26CNW5ZX;
@@ -1564,7 +1573,7 @@
 				INFOPLIST_FILE = "todo_txt_touch_ios-Info.plist";
 				INFOPLIST_PREFIX_HEADER = DropboxApiKey.h;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1575,8 +1584,9 @@
 				PRODUCT_NAME = Todo.txt;
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1625,7 +1635,7 @@
 				INFOPLIST_FILE = "todo_txt_touch_ios-Info.plist";
 				INFOPLIST_PREFIX_HEADER = DropboxApiKey.h;
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1635,8 +1645,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.flouu.TodotxtTouch;
 				PRODUCT_NAME = Todo.txt;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = NO;
 			};

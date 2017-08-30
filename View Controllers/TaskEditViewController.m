@@ -320,7 +320,7 @@ static NSString *accessability = @"Task Details";
 
 - (IBAction)doneButtonPressed:(id)sender {
 	self.curInput = self.textView.text;
-	
+
 	if (self.curInput.length == 0) {
 		[self exitController];
 		return;
@@ -394,7 +394,12 @@ static NSString *accessability = @"Task Details";
 - (void) priorityWasSelected:(NSInteger *)selectedIndex element:(id)element {
 	self.actionSheetPicker = nil;
 	if (selectedIndex >= 0) {
-		Priority *selectedPriority = [Priority byName:(PriorityName)selectedIndex];
+        Priority *selectedPriority;
+        if ([[Priority byName:(PriorityName)selectedIndex] isEqual:[Priority byName:(PriorityName)1]]) {
+            selectedPriority = [Priority byName:PriorityZ];
+        } else {
+            selectedPriority = [Priority byName:(PriorityName)selectedIndex];
+        }
 		NSString *newText = nil;
 		if (selectedPriority == [Priority NONE]) {
 			newText = [NSString stringWithString:[[PriorityTextSplitter split:self.textView.text] text]];
@@ -464,9 +469,6 @@ static NSString *accessability = @"Task Details";
 																		 rows:[taskBag contexts]
 															 initialSelection:0
 																	doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-																		NSLog(@"Picker: %@", picker);
-																		NSLog(@"Selected Index: %ld", (long)selectedIndex);
-																		NSLog(@"Selected Value: %@", selectedValue);
 																		[self contextWasSelected:selectedIndex element:selectedValue];
 																	}
 																  cancelBlock:^(ActionSheetStringPicker *picker) {
@@ -480,9 +482,6 @@ static NSString *accessability = @"Task Details";
 																		 rows:[Priority allCodes]
 															 initialSelection:curPriority
 																	doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-																		NSLog(@"Picker: %@", picker);
-																		NSLog(@"Selected Index: %ld", (long)selectedIndex);
-																		NSLog(@"Selected Value: %@", selectedValue);
 																		[self priorityWasSelected:selectedIndex element:selectedValue];
 																	}
 																  cancelBlock:^(ActionSheetStringPicker *picker) {
@@ -495,9 +494,6 @@ static NSString *accessability = @"Task Details";
 																		 rows:[taskBag projects]
 															 initialSelection:0
 																	doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-																		NSLog(@"Picker: %@", picker);
-																		NSLog(@"Selected Index: %ld", (long)selectedIndex);
-																		NSLog(@"Selected Value: %@", selectedValue);
 																		[self projectWasSelected:selectedIndex element:selectedValue];
 																	}
 																  cancelBlock:^(ActionSheetStringPicker *picker) {

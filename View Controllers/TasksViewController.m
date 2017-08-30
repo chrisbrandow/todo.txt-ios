@@ -118,7 +118,6 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 #pragma mark Private methods
 
 - (void)sync:(id)sender {
-	NSLog(@"sync: called");
     self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:kTODOTasksSyncingRefreshText];
     [self.appDelegate syncClientWithCompletion:^(BOOL success, NSError *error) {
         [self.refreshControl endRefreshing];
@@ -127,14 +126,10 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 }
 
 - (void) reloadData:(NSNotification *) notification {
-    NSLog(@"%s %@", __PRETTY_FUNCTION__, notification);
-
 	// reload global tasklist from disk
 	[self.appDelegate.taskBag reload];	
 
 	// reload main tableview data
-//    self.filter = [FilterFactory getAndFilterWithPriorities:nil contexts:nil projects:nil text:nil scopes:nil caseSensitive:NO];
-
 	self.tasks = [self.appDelegate.taskBag tasksWithFilter:nil withSortOrder:self.sort];
 	[self.tableView reloadData];
 	
@@ -227,18 +222,12 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 
     self.emptyLabel.text = kEmptyFileMessage;
     NSString *yesterdayDateString = [Util stringFromDate:[NSDate dateWithTimeIntervalSinceNow:(-24*60*60)] withFormat:txtDateFormat];
-    NSLog(@"yesterday: %@", yesterdayDateString);
-
     NSString *todayDateString = [Util stringFromDate:[NSDate date] withFormat:txtDateFormat];
 
     NSString *lastViewedDate = [[NSUserDefaults standardUserDefaults] objectForKey:@"lastViewedDate"];
-    NSLog(@"today: %@", todayDateString);
-    NSLog(@"last: %@", lastViewedDate);
-    NSLog(@"days equal: %zd", [todayDateString isEqualToString:lastViewedDate]);
     __weak TasksViewController *weakSelf = self;
 
     if ([todayDateString isEqualToString:lastViewedDate]) {
-        NSLog(@"toggle to today");
         self.title = @"Today";
         self.firstRun = ^void() {
             weakSelf.lastFilteredScopes = @[@"Last Two Weeks"];
@@ -246,7 +235,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
         };
 
     } else {
-        self.title =  [NSString stringWithFormat:@"%@-%@", lastViewedDate, todayDateString];// @"Recent";
+        self.title = @"Recent";
         self.firstRun = ^void() {
             weakSelf.lastFilteredScopes = @[@"Last Two Weeks"];
             [weakSelf.appDelegate.taskBag reload];
@@ -262,15 +251,14 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
-	NSLog(@"viewWillAppear - tableview");
 
 	[self hideSearchBar:NO];
-
     if (self.firstRun) {
         self.firstRun();
         _firstRun = nil;
     }
     [self reloadData:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(becameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(reloadData:) 
 												 name:kTodoChangedNotification 
@@ -278,6 +266,19 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
     UIImage *filterBack = (self.lastFilteredContexts.count || self.lastFilteredProjects.count) ? [self backImageWithColor:[UIColor colorWithWhite:.7 alpha:1.0]] : [self backImageWithColor:self.view.backgroundColor];
 
     [self.filterBarButtonItem setBackgroundImage:filterBack forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+}
+
+
+- (void)becameActive:(NSNotification *)notif
+{
+    if (![self.lastFilteredPriorities containsObject:[Priority byName:PriorityZ]]) {
+        NSMutableArray *priorities = [self.lastFilteredPriorities mutableCopy] ?: [NSMutableArray new];
+        [priorities addObject:[Priority byName:PriorityZ]];
+        self.lastFilteredPriorities = [priorities copy];
+        [self filterForContexts:self.lastFilteredContexts projects:self.lastFilteredProjects scopes:self.lastFilteredScopes priorities:self.lastFilteredPriorities];
+    }
+
+
 }
 
 - (void) viewDidAppear:(BOOL)animated {	
@@ -319,8 +320,6 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 
 - (NSArray *)filteredTasks
 {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
-
     return [self.appDelegate.taskBag tasksWithFilter:self.filter withSortOrder:self.sort];
 }
 
@@ -334,7 +333,7 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
 
 - (UIFont *)mainTextFont
 {
-    return [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:14];
+    return [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:18.0];
 }
 
 #pragma mark -
@@ -403,7 +402,6 @@ static NSString * const kTODOTasksSyncingRefreshText = @"Syncing with Dropbox no
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"auto_archive_preference"]) {
             [taskBag archive];
         }
-NSLog(@"1");
 
         [self reloadData:nil];
         [self.appDelegate pushToRemoteWithCompletion:nil];
@@ -424,7 +422,6 @@ NSLog(@"1");
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"auto_archive_preference"]) {
             [taskBag archive];
         }
-NSLog(@"2");
         [self reloadData:nil];
         [self.appDelegate pushToRemoteWithCompletion:nil];
         
@@ -452,7 +449,6 @@ shouldReloadTableForSearchString:(NSString *)searchString
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
 	self.savedSearchTerm = nil;
-    NSLog(@"3");
 	[self reloadData:nil];
 }
 
@@ -475,11 +471,10 @@ shouldReloadTableForSearchString:(NSString *)searchString
 {
     self.lastFilteredPriorities = (self.lastFilteredPriorities.count) ? nil : @[[Priority byName:PriorityZ]];
     [self filterForContexts:self.lastFilteredContexts projects:self.lastFilteredProjects scopes:self.lastFilteredScopes priorities:self.lastFilteredPriorities];
-    self.todayBarButton.title = (self.lastFilteredPriorities.count) ? @"⏳" : @"📄";
+    self.todayBarButton.title = (self.lastFilteredPriorities.count) ? @"📄" : @"⏳";
 }
 
 - (IBAction)addButtonPressed:(id)sender {
-	NSLog(@"addButtonPressed called");
     [self performSegueWithIdentifier:kAddTaskSegueIdentifier sender:self];
 }
 
@@ -569,10 +564,8 @@ shouldReloadTableForSearchString:(NSString *)searchString
 				break;
 			case ARCHIVE_TAG:
                 [self dismissViewControllerAnimated:YES completion:nil];
-                NSLog(@"Archiving...");
 				[self.appDelegate displayNotification:@"Archiving completed tasks..."];
 				[self.appDelegate.taskBag archive];
-                NSLog(@"4");
 				[self reloadData:nil];
 				[self.appDelegate pushToRemoteWithCompletion:nil];
 				break;
@@ -589,15 +582,10 @@ shouldReloadTableForSearchString:(NSString *)searchString
 											rows:[Sort descriptions]
 								initialSelection:[self.sort name]
 									   doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-										   NSLog(@"Picker: %@", picker);
-										   NSLog(@"Selected Index: %ld", (long)selectedIndex);
-										   NSLog(@"Selected Value: %@", selectedValue);
 										   self.actionSheetPicker = nil;
 										   if (selectedIndex >= 0) {
 											   self.sort = [Sort byName:selectedIndex];
 											   [self setSortOrderPref];
-                                               NSLog(@"5");
-
 											   [self reloadData:nil];
 											   [self hideSearchBar:NO];
 										   }									   }

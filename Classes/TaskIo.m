@@ -67,9 +67,7 @@ static BOOL sUseWindowsLineBreaks = NO;
 		}
 		
 		line = [line stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//        NSLog(@"read line %d: %@", i, line);
         if ( ![line length] ) {
-            NSLog(@"Ignoring blank line at line number %d", i);
             continue;
         }
 		Task *task = [[Task alloc] initWithId:i withRawText:line];

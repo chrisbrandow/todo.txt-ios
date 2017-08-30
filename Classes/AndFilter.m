@@ -58,8 +58,6 @@
 }
 
 - (void) addFilter:(id<Filter>)filter {
-    NSLog(@"add filter: %@", [filter class]);
-
 	if (filter) {
 		[filters addObject:filter];
 	}

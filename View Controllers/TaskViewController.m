@@ -341,7 +341,6 @@ static CGFloat const kIpadGroupedTableViewSideInset = 40;
 }
 
 - (void) didTapCompleteButton {
-	NSLog(@"didTapCompleteButton called");
 	Task* task = [self task];
 	if ([task completed]) {
 		//TODO: make toast "Task already complete"
@@ -354,7 +353,6 @@ static CGFloat const kIpadGroupedTableViewSideInset = 40;
 }
 
 - (void) didTapPrioritizeButton {
-	NSLog(@"didTapPrioritizeButton called");
 	[self.actionSheetPicker hidePickerWithCancelAction];
 	NSInteger curPriority = (NSInteger)[[[self task] priority] name];
 	UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]]; //FIXME: don't hardcode this
@@ -363,9 +361,6 @@ static CGFloat const kIpadGroupedTableViewSideInset = 40;
 											rows:[Priority allCodes]
 								initialSelection:curPriority
 									   doneBlock:^(ActionSheetStringPicker *picker, NSInteger selectedIndex, id selectedValue) {
-										   NSLog(@"Picker: %@", picker);
-										   NSLog(@"Selected Index: %ld", (long)selectedIndex);
-										   NSLog(@"Selected Value: %@", selectedValue);
 										   self.actionSheetPicker = nil;
 										   if (selectedIndex >= 0) {
 											   Priority *selectedPriority = [Priority byName:(PriorityName)selectedIndex];
@@ -379,12 +374,10 @@ static CGFloat const kIpadGroupedTableViewSideInset = 40;
 }
 
 - (void) didTapUpdateButton {
-	NSLog(@"didTapUpdateButton called");
     [self performSegueWithIdentifier:kTaskEditSegueIdentifier sender:self];
 }
 
 - (void) didTapDeleteButton {
-	NSLog(@"didTapDeleteButton called");
 	// confirmation pane
 	UIActionSheet* dlg = [[UIActionSheet alloc] 
 					  initWithTitle:@"This cannot be undone. Are you sure?"
@@ -397,7 +390,6 @@ static CGFloat const kIpadGroupedTableViewSideInset = 40;
 }
 
 - (void) didTapUndoCompleteButton {
-	NSLog(@"didTapUndoCompleteButton called");
 	// confirmation pane
 	UIActionSheet* dlg = [[UIActionSheet alloc] 
 						  initWithTitle:@"Are you sure?"

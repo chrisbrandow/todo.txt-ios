@@ -61,15 +61,11 @@
 - (BOOL)apply:(id)object {
 //this acutally needs to be incorporated into settings view
     Task *input = (Task *)object;
-//    NSLog(@"date: %@", input.prependedDate);
-//    NSLog(@"date: %@", [Util dateFromString:input.prependedDate withFormat:txtDateFormat]);
     NSDate *date = [Util dateFromString:input.prependedDate withFormat:txtDateFormat];
-    //need to make this a proper date-based thing
-    //need to have a way to turn it off and on.
-//    NSLog(@"[[NSDate date] timeIntervalSinceDate:date]: %.2f", [[NSDate date] timeIntervalSinceDate:date]);
+    //Todo: need to make this a proper date-based thing
+    //Todo: need to have a way to turn it off and on.
 
     if ([[NSDate date] timeIntervalSinceDate:date] < 24*60*60*14 || [input.originalText containsString:@"sdm:"] || input.priority.name == PriorityZ) {
-//        NSLog(@"yes");
         return YES;
     }
     
@@ -88,20 +84,14 @@
 									  text:(NSString*)text 
                                     scopes:(NSArray *)scopes
 							 caseSensitive:(BOOL)caseSensitive {
-//    NSLog(@"%s", __PRETTY_FUNCTION__);
 
 	AndFilter *filter = [[AndFilter alloc] init];
-//    [filter addFilter:[[BySDMFilter alloc] init]];
 	if (priorities.count > 0) {
 		[filter addFilter:[[ByPriorityFilter alloc] initWithPriorities:priorities]];
 	}
 	
 	if (contexts.count > 0) {
-        NSLog(@"contexts: %@", contexts);
         ByContextFilter *cFilter = [[ByContextFilter alloc] initWithContexts:contexts];
-        NSLog(@"cfilt: %@", cFilter);
-
-
 		[filter addFilter:cFilter];
 	}
 	

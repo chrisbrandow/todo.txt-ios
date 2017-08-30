@@ -152,7 +152,7 @@
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     BOOL isAllowed = [defaults boolForKey:@"date_new_tasks_preference"];
-    
+
     return isAllowed && !self.task.completed && self.task.relativeAge;
 }
 
@@ -180,7 +180,7 @@
 
 - (UIFont *)taskFont
 {
-    return [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:14.0];;
+    return [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:18.0];;
 }
 
 - (UIColor *)taskColor

@@ -119,7 +119,7 @@
 		</dict>
 		<dict>
 			<key>DefaultValue</key>
-			<string>1.10</string>
+			<string>Error Reading File: /Users/ChrisSC</string>
 			<key>Key</key>
 			<string>version_string</string>
 			<key>Title</key>

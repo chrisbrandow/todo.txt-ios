@@ -117,7 +117,6 @@ static Task* find(NSArray *tasks, Task *task) {
 
 - (void) reload {
     if (!self.tasks || [self todoFileModifiedSince:self.lastReload]) {
-        NSLog(@"is reloading");
 		[self.localTaskRepository create];
 		self.tasks = [self.localTaskRepository load];
 
@@ -176,6 +175,9 @@ static Task* find(NSArray *tasks, Task *task) {
         Task *task = [[Task alloc] initWithId:[self.tasks count]
                                   withRawText:string
                      withDefaultPrependedDate:date];
+        if (task.priority.name == PriorityNone) {
+            [task setPriorityToday];
+        }
         [self.tasks addObject:task];
     }];
     
@@ -228,7 +230,6 @@ static Task* find(NSArray *tasks, Task *task) {
 
 - (NSArray*) tasksWithFilter:(id<Filter>)filter withSortOrder:(Sort*)sortOrder {
 	NSMutableArray *localTasks = [NSMutableArray arrayWithCapacity:[_tasks count]];
-//    NSLog(@"imp filter: %@", filter);
 
 	if (filter != nil) {
 		for (Task* task in _tasks) {

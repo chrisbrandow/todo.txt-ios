@@ -16,7 +16,6 @@
 
 - (void)linkFromController:(UIViewController *)rootController;
 - (void)linkUserId:(NSString *)userId fromController:(UIViewController *)rootController;
-
 - (BOOL)handleOpenURL:(NSURL *)url;
 
 @end
